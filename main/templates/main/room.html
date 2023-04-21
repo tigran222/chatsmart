@@ -1,0 +1,15 @@
+{% load static %}  
+  <h2>{{ room.name }}</h2>
+  <div id="message-list">
+    {% for message in messages %}
+      <p>{{ message.content }} - {{ message.user.username }} - {{ message.timestamp }}</p>
+    {% endfor %}
+  </div>
+  <form id="send-message-form" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="room_id" value="{{ room.id }}">
+    <input type="text" id="message-input" name="content" required>
+    <button type="submit" id="send-button">Send</button>
+  </form>
+
+  <script src="{% static 'js/chat.js' %}"></script>

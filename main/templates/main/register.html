@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chess Register</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'css/register.css' %}" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Register Form</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" required>
+
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="email" required>
+
+
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password1" required>
+
+            <label for="password"><b>Confirm Password</b></label>
+            <input type="password" placeholder="Confirm Password" name="password2" required>
+
+            <button type="submit">Register</button>
+            <label>
+                <a href="{% url 'login' %}">Already have an account</a>
+            </label>
+        </form>
+    </div>
+
+</body>
+</html>

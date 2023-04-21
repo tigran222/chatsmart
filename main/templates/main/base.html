@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat</title>
+  </head>
+  <body>
+    <h1>Hello To Chat : {{ username }}</h1>
+    {% for room in rooms %}
+      <a href="{% url 'room' room.pk %}">{{ room.name }}</a>
+    {% empty %}
+      <h3>You Have no access to rooms</h3>
+    {% endfor %}
+    <div id="chatlog">
+      <!-- Chat messages will appear here -->
+    </div>
+    
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Log out</button>
+      </form>
+    {% endif %}
+  </body>
+</html>
