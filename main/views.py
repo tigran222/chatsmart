@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
 from .models import Room, Message
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -62,18 +62,18 @@ def logout_request(request):
 def room(request, room_id):
     room = get_object_or_404(Room, pk=room_id)
     messages = Message.objects.filter(room=room)
-    # if request.method == 'POST':
-    # 	form = MessageForm(request.POST)
-    # 	if form.is_valid():
-    # 		message = form.save(commit=False)
-    # 		message.room = room
-    # 		message.user = request.user
-    # 		message.save()
-    # 		form = MessageForm()
-    # else:
-    # 	form = MessageForm()
+    if request.method == 'POST':
+    	form = MessageForm(request.POST)
+    	if form.is_valid():
+    		message = form.save(commit=False)
+    		message.room = room
+    		message.user = request.user
+    		message.save()
+    		form = MessageForm()
+    else:
+    	form = MessageForm()
 
-    # messages = Message.objects.filter(room=room)
+    messages = Message.objects.filter(room=room)
     if room.is_private and room.password:
         return redirect('room_password', room_id=room.pk)
 
@@ -97,22 +97,22 @@ def room_password(request, room_id):
     return render(request, 'main/room_password.html', {'room': room, 'message': message})
 
 
-@csrf_exempt
-def send_message(request):
-	if request.method == 'POST':
-		form = MessageForm(request.POST)
-		if form.is_valid():
-			return JsonResponse({'success': True})
-	else:
-		return JsonResponse({'success': False})
+# @csrf_exempt
+# def send_message(request):
+# 	if request.method == 'POST':
+# 		form = MessageForm(request.POST)
+# 		if form.is_valid():
+# 			return JsonResponse({'success': True})
+# 	else:
+# 		return JsonResponse({'success': False})
 
 
-@csrf_exempt
-def get_messages(request, room_id):
-    room = get_object_or_404(Room, pk=room_id)
-    messages = Message.objects.filter(room=room).order_by('-created_at')[:50][::-1]
-    message_list = []
-    for message in messages:
-        message_list.append({'id': message.pk, 'content': message.content, 'username': message.user.username, 'created_at': message.created_at.strftime('%Y-%m-%d %H:%M:%S')})
+# @csrf_exempt
+# def get_messages(request, room_id):
+#     room = get_object_or_404(Room, pk=room_id)
+#     messages = Message.objects.filter(room=room).order_by('-created_at')[:50][::-1]
+#     message_list = []
+#     for message in messages:
+#         message_list.append({'id': message.pk, 'content': message.content, 'username': message.user.username, 'created_at': message.created_at.strftime('%Y-%m-%d %H:%M:%S')})
 
-    return JsonResponse({'messages': message_list})
+#     return JsonResponse({'messages': message_list})
